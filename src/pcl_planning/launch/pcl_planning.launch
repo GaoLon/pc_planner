@@ -1,0 +1,21 @@
+<launch>
+
+  <node pkg="pcl_planning" name="pcl_planner" type="pcl_planner" output="screen" >
+      <param name="max_iter" type="int" value="50000"/>
+      <param name="step" type="double" value="0.6"/>
+      <param name="heuristic_straight_thresh" type="int" value="10"/>
+      <!-- at least 1 -->
+      <param name="tau_weight" type="int" value="5"/>
+      <param name="clear_start_tree" type="bool" value="true"/>
+      <!-- RRT_star parameters -->>
+      <param name="rs_exp_k" type="double" value="3"/>
+      <param name="r_near_k" type="double" value="6"/>
+      <param name="path_r" type="double" value="0.1"/>
+      <param name="max_refine_num" type="int" value="500"/>
+
+  </node>
+
+  <!-- 在rviz中显示-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find pcl_planning)/config/pcl_plan.rviz" />  
+
+</launch>
