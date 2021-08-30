@@ -46,6 +46,20 @@ protected:
 							0.601458896685019, 0.601458896685019, 0.603283799402430, 0.603283799402430,
 							0.605833261322673, 0.605833261322673, 0.609086090310233, 0.609086090310233,
 							0.612995520383789, 0.612995520383789, 0}; //sf
+	// Vector3d traj_lib[11] = { {0.16,0,0}, { 0.159992000066666, 0.001599973333467,0.03}, \
+	// { 0.159992000066666, -0.001599973333467, -0.03} , { 0.159928005399838 ,  0.004799280032399 ,0.06},\
+	// { 0.159928005399838, -0.004799280032399, -0.06}, { 0.159872017065756 ,  0.006398293469861 ,0.09},\
+	// { 0.159872017065756, -0.006398293469861, -0.09}, { 0.159712086389633 ,  0.009594241036711,0.12 },\
+	// { 0.159712086389633, -0.009594241036711, -0.12 }, { 0.159608160040525 ,  0.011190855574005 ,0.15},\
+	// { 0.159608160040525, -0.011190855574005, -0.15} };		//x, y, theta
+	// Vector3d traj_lib_back[11] = { {-0.16,0,0}, { -0.159992000066666, 0.001599973333467,-0.03}, \
+	// { -0.159992000066666, -0.001599973333467, 0.03} , { -0.159928005399838 ,  0.004799280032399 ,-0.06},\
+	// { -0.159928005399838, -0.004799280032399, 0.06}, { -0.159872017065756 ,  0.006398293469861 ,-0.09},\
+	// { -0.159872017065756, -0.006398293469861, 0.09}, { -0.159712086389633 ,  0.009594241036711,-0.12 },\
+	// { -0.159712086389633, -0.009594241036711, 0.12 }, { -0.159608160040525 ,  0.011190855574005 ,-0.15},\
+	// { -0.159608160040525, -0.011190855574005, 0.15} };		//x, y, theta
+	// double traj_cost[12] = { 0.16,0.1600288 ,0.1600288,0.1601152 ,0.1601152 ,\
+	// 	0.1602592, 0.1602592, 0.1604608, 0.1604608, 0.16072, 0.16072, 0 };		//sf
 	vector<RRT_Node> get_path();
 
 	// PCTrajNode start, goal;
@@ -83,7 +97,7 @@ public:
 		pcl_sub = nh.subscribe<sensor_msgs::PointCloud2>("/overall_map", 2, &RRT::pclMapCallback, this);
 		// stop_sub = nh.subscribe("/rugged_car/tracking/stop", 1, &stanley_control::stop_callback, this);
 
-		goal_sub = nh.subscribe("/move_base_simple/goal", 10, &RRT::setGoalCallback, this);
+		// goal_sub = nh.subscribe("/move_base_simple/goal", 10, &RRT::setGoalCallback, this);
 		tree_node_pub = nh.advertise<geometry_msgs::PoseArray>("/planning/tree_poses", 2);
 		tree_edge_pub = nh.advertise<visualization_msgs::Marker>("/planning/tree_edges", 2);
 		path_pub = nh.advertise<geometry_msgs::PoseArray>("/planning/path", 2);
@@ -107,7 +121,7 @@ public:
 	const vector<RRT_Node> *get_goal_tree() { return &goal_tree; }
 
 	void publishSamplePoint(Vector3d point);
-	void setGoalCallback(const geometry_msgs::PoseStamped &goal_msg);
+	// void setGoalCallback(const geometry_msgs::PoseStamped &goal_msg);
 	void pclMapCallback(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg);
 	void visualizeTrees();
 	void visualizePath(vector<RRT_Node> path);

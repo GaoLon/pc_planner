@@ -30,9 +30,10 @@ class LocalOptimizer;
 
 struct param_restrain
 {
-	Matrix<double, 4, 1> d_rob = { 0.5,0.5,0.5,1 };
-	double d_nom = 0.15;
+	Matrix<double, 4, 1> d_rob = { 1,1,1,1 };
+	double d_nom = 0.16;
 	//double d_nom = 0.6;
+	// double kappa_max = 1.5;
 	double kappa_max = 8;
 	double roll_max = M_PI_4;
 	double pitch_min = -M_PI_4;
@@ -66,7 +67,7 @@ public:
 	bool fp(const Matrix4d& Tr, pcl::PointCloud<pcl::PointXYZI>::Ptr kdmap, pcl::KdTreeFLANN<pcl::PointXYZI> kd, int K=16);
 	double ft(pcl::PointCloud<pcl::PointXYZI>::Ptr kdmap, pcl::KdTreeFLANN<pcl::PointXYZI> kd);
 	void ter_assess(void);
-	bool isTraversable(void) { return tau > 0.01; }
+	bool isTraversable(void) { return tau > 0.5; }
 	VectorXd connect(const PCTrajNode& toNode);
 	double get_dist(Vector3d p){ return (p - T.topRightCorner(3, 1)).norm(); }
 	double get_dist(const PCTrajNode& p) const { return (p.T.topRightCorner(3, 1) - T.topRightCorner(3, 1)).norm(); }
@@ -81,7 +82,7 @@ public:
 	static param_restrain PR;
 	static pcl::PointCloud<pcl::PointXYZI>::Ptr PCMap;
 	static VectorXd get_connect(const PCTrajNode& fromNode, const PCTrajNode& toNode);
-	static vector<PCTrajNode> SRT_Generate(const PCTrajNode& fromNode, const PCTrajNode& toNode, double d1 = 4.0, double d2 = 8.0);
+	static vector<PCTrajNode> SRT_Generate(const PCTrajNode& fromNode, const PCTrajNode& toNode, double d1 = 4.0);
 	static pair<bool, double> get_rho(pcl::PointXYZI& p, pcl::PointCloud<pcl::PointXYZI>::Ptr kdmap, pcl::KdTreeFLANN<pcl::PointXYZI> kd);
 	// void pubProjectedPose();
 	~PCTrajNode(){}

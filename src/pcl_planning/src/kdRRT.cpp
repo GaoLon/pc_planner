@@ -154,35 +154,35 @@ void kdRRT::pclMapCallback(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg
 	}
 }
 
-void kdRRT::setGoalCallback(const geometry_msgs::PoseStamped &goal_msg)
-{
-	if (kdmapReceived)
-	{
-		tf::Quaternion q;
-		tf::quaternionMsgToTF(goal_msg.pose.orientation, q);
-		tf::Matrix3x3 R(q);
+// void kdRRT::setGoalCallback(const geometry_msgs::PoseStamped &goal_msg)
+// {
+// 	if (kdmapReceived)
+// 	{
+// 		tf::Quaternion q;
+// 		tf::quaternionMsgToTF(goal_msg.pose.orientation, q);
+// 		tf::Matrix3x3 R(q);
 
-		Matrix4d goal_mat = Matrix4d::Identity();
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				goal_mat(i, j) = R[i][j];
-			}
-		}
-		goal_mat(0, 3) = goal_msg.pose.position.x;
-		goal_mat(1, 3) = goal_msg.pose.position.y;
-		goal_mat(2, 3) = goal_msg.pose.position.z;
-		//TODO
-		PCTrajNode pcn(goal_mat), pseudoOdom(Matrix4d::Identity());
-		find_path(pseudoOdom, pcn);
-		visualizeTrees();
-	}
-	else
-	{
-		ROS_INFO("No map received yet! Can't plan now.");
-	}
-}
+// 		Matrix4d goal_mat = Matrix4d::Identity();
+// 		for (int i = 0; i < 3; i++)
+// 		{
+// 			for (int j = 0; j < 3; j++)
+// 			{
+// 				goal_mat(i, j) = R[i][j];
+// 			}
+// 		}
+// 		goal_mat(0, 3) = goal_msg.pose.position.x;
+// 		goal_mat(1, 3) = goal_msg.pose.position.y;
+// 		goal_mat(2, 3) = goal_msg.pose.position.z;
+// 		//TODO
+// 		PCTrajNode pcn(goal_mat), pseudoOdom(Matrix4d::Identity());
+// 		find_path(pseudoOdom, pcn);
+// 		visualizeTrees();
+// 	}
+// 	else
+// 	{
+// 		ROS_INFO("No map received yet! Can't plan now.");
+// 	}
+// }
 
 void kdRRT::update_cost(kdRRT_NodePtr p)
 {
@@ -444,7 +444,7 @@ vector<kdRRT_Node> kdRRT::get_path()
 	{
 		kdRRT_Node& p = *g;
 		//cout << p.cost << endl;
-		cout << p.node.get_pos()[0] << " " << p.node.get_pos()[1] << " " << p.node.get_pos()[2] << endl;
+		// cout << p.node.get_pos()[0] << " " << p.node.get_pos()[1] << " " << p.node.get_pos()[2] << endl;
 		result.push_back(p);
 		g = p.parent;
 	}
@@ -483,7 +483,7 @@ vector<kdRRT_Node> kdRRT::find_path(const PCTrajNode& start, const PCTrajNode& g
 	for (int i = 0; i < max_iter; i++)
 	{
 		// sample, extend this tree
-		cout << "iteration: " << i << endl;
+		// cout << "iteration: " << i << endl;
 		if (i % 100 == 0)
 		{
 			ROS_INFO("Iteration: %d", i);
@@ -540,10 +540,10 @@ vector<kdRRT_Node> kdRRT::find_path(const PCTrajNode& start, const PCTrajNode& g
 	return result;
 }
 
-int main(int argc, char **argv)
-{
-	ros::init(argc, argv, "kdRRT_node");
-	ROS_INFO("Planner started!");
-	kdRRT planner;
-	ros::spin();
-}
+// int main(int argc, char **argv)
+// {
+// 	ros::init(argc, argv, "kdRRT_node");
+// 	ROS_INFO("Planner started!");
+// 	kdRRT planner;
+// 	ros::spin();
+// }

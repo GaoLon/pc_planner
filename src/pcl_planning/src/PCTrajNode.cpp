@@ -223,13 +223,10 @@ double PCTrajNode::ft(pcl::PointCloud<pcl::PointXYZI>::Ptr kdmap, pcl::KdTreeFLA
 
 VectorXd PCTrajNode::get_connect(const PCTrajNode& fromNode, const PCTrajNode& toNode)
 {
+	// through OBVP
 	VectorXd result = VectorXd::Zero(5);
 	// get boundary value
-	double x0 = 0.0;
-	double y0 = 0.0;
-	double theta0 = 0.0;
-	double kappa0 = fromNode.kappa;
-	Vector4d init(x0, y0, theta0, kappa0);
+	double kappa0 =fromNode.kappa;
 	MatrixXd T_b = fromNode.T.inverse()*toNode.T;
 	double xf = T_b.row(0)[3];
 	double yf = T_b.row(1)[3];
@@ -245,17 +242,54 @@ VectorXd PCTrajNode::get_connect(const PCTrajNode& fromNode, const PCTrajNode& t
 		return result;
 	}
 	double kappaf = toNode.kappa;
-	Vector4d ends(xf, yf, thetaf, kappaf);
-	//cout << "end=" << ends << endl;
 
+	// close-formed solution
+	double T1 = xf;
+	double T2 = T1*T1;
+	double T3 = T2*T1;
+	double T4 = T3*T1;
+	double T5 = T4*T1;
 	result[0] = kappa0;
-	result.tail(4) = get_cubic_curvature(init, ends);
-	if (result.tail(4) == Vector4d::Zero())
-	{
-		//cout << "cubic curvature failed!" << endl;
-		return VectorXd::Zero(5);
-	}
+	result[3] = 10*(kappaf*T2-6*thetaf*T1+12*yf)/T5;
+	result[2] = -6*(30*yf-14*T1*thetaf-T2*kappa0+2*T2*kappaf)/T4;
+	result[1] = 3*(20*yf-8*T1*thetaf-2*T2*kappa0+T2*kappaf)/T3;
+	result[4] = T1;
 	return result;
+
+	// through cubic curvature
+	// VectorXd result = VectorXd::Zero(5);
+	// // get boundary value
+	// double x0 = 0.0;
+	// double y0 = 0.0;
+	// double theta0 = 0.0;
+	// double kappa0 = fromNode.kappa;
+	// Vector4d init(x0, y0, theta0, kappa0);
+	// MatrixXd T_b = fromNode.T.inverse()*toNode.T;
+	// double xf = T_b.row(0)[3];
+	// double yf = T_b.row(1)[3];
+	// if (T_b.row(0)[3] < 0)
+	// {
+	// 	//cout << "xf is nagetive!" << endl;
+	// 	return result;
+	// }
+	// double thetaf = atan2(T_b.row(1)[0], T_b.row(0)[0]);
+	// if (fabs(thetaf) > 1)
+	// {
+	// 	//cout << "delta theta is too high!" << endl;
+	// 	return result;
+	// }
+	// double kappaf = toNode.kappa;
+	// Vector4d ends(xf, yf, thetaf, kappaf);
+	// //cout << "end=" << ends << endl;
+
+	// result[0] = kappa0;
+	// result.tail(4) = get_cubic_curvature(init, ends);
+	// if (result.tail(4) == Vector4d::Zero())
+	// {
+	// 	//cout << "cubic curvature failed!" << endl;
+	// 	return VectorXd::Zero(5);
+	// }
+	// return result;
 }
 
 VectorXd PCTrajNode::connect(const PCTrajNode& toNode)
@@ -264,20 +298,92 @@ VectorXd PCTrajNode::connect(const PCTrajNode& toNode)
 	return t;
 }
 
-vector<PCTrajNode> PCTrajNode::SRT_Generate(const PCTrajNode& fromNode, const PCTrajNode& toNode, double d1, double d2)
+vector<PCTrajNode> PCTrajNode::SRT_Generate(const PCTrajNode& fromNode, const PCTrajNode& toNode, double d1)
 {
+	// through cubic curvature
+	// // initilization
+	// vector<PCTrajNode> result;
+	// double x0 = 0.0;
+	// double y0 = 0.0;
+	// double theta0 = 0.0;
+	// double kappa0 = fromNode.kappa;
+	// Vector4d init(x0, y0, theta0, kappa0);
+	// MatrixXd T_b = fromNode.T.inverse()*toNode.T;
+	// double xf = T_b.row(0)[3];
+	// double yf = T_b.row(1)[3];
+
+	// if (T_b.row(0)[3] < 0)
+	// {
+	// 	return result;
+	// }
+
+	// double thetaf = atan2(T_b.row(1)[0], T_b.row(0)[0]);
+
+	// if (fabs(thetaf) > 1)
+	// {
+	// 	return result;
+	// }
+
+	// double kappaf = toNode.kappa;
+	// Vector4d ends(xf, yf, thetaf, kappaf);
+	// double dsg = hypot(xf, yf);
+
+	// if (dsg >= d1)
+	// {
+	// 	return result;
+	// }
+	
+	// //cout << "get_cubic_curvature" << endl;
+	// Vector4d srt = get_cubic_curvature(init, ends);
+	// if (srt == Vector4d::Zero())
+	// {
+	// 	result.clear();
+	// 	return result;
+	// }
+	// Vector4d x(srt);
+	// for (double seg = 0.0; seg < srt[3]; seg+=PR.d_nom)
+	// {
+	// 	x[3] = seg;
+	// 	Vector4d path_seg = forward(init, x);
+	// 	Matrix4d T_seg = Matrix4d::Identity();
+	// 	T_seg.row(0)[0] = T_seg.row(1)[1] = cos(path_seg[2]);
+	// 	T_seg.row(0)[1] = -sin(path_seg[2]);
+	// 	T_seg.row(1)[0] = sin(path_seg[2]);
+	// 	/*if (T_b.row(0)[3] < 0)
+	// 	{
+	// 		T_seg.row(0)[3] = -path_seg[0];
+	// 		T_seg.row(1)[3] = -path_seg[1];
+	// 	}
+	// 	else
+	// 	{*/
+	// 		T_seg.row(0)[3] = path_seg[0];
+	// 		T_seg.row(1)[3] = path_seg[1];
+	// 	//}
+	// 	PCTrajNode temp(fromNode.T*T_seg, path_seg[3]);
+	// 	if (temp.isTraversable())
+	// 	{
+	// 		result.push_back(temp);
+	// 	}
+	// 	else
+	// 	{
+	// 		result.clear();
+	// 		return result;
+	// 	}
+	// }
+
+	// result.push_back(toNode);
+
+
+
+	// through OBVP
 	// initilization
 	vector<PCTrajNode> result;
-	double x0 = 0.0;
-	double y0 = 0.0;
-	double theta0 = 0.0;
 	double kappa0 = fromNode.kappa;
-	Vector4d init(x0, y0, theta0, kappa0);
 	MatrixXd T_b = fromNode.T.inverse()*toNode.T;
 	double xf = T_b.row(0)[3];
 	double yf = T_b.row(1)[3];
 
-	if (T_b.row(0)[3] < 0)
+	if (T_b.row(0)[3] < 0||fabs(yf/xf)>1)
 	{
 		return result;
 	}
@@ -290,7 +396,6 @@ vector<PCTrajNode> PCTrajNode::SRT_Generate(const PCTrajNode& fromNode, const PC
 	}
 
 	double kappaf = toNode.kappa;
-	Vector4d ends(xf, yf, thetaf, kappaf);
 	double dsg = hypot(xf, yf);
 
 	if (dsg >= d1)
@@ -298,32 +403,91 @@ vector<PCTrajNode> PCTrajNode::SRT_Generate(const PCTrajNode& fromNode, const PC
 		return result;
 	}
 	
-	//cout << "get_cubic_curvature" << endl;
-	Vector4d srt = get_cubic_curvature(init, ends);
+	// close-formed solution
+	double T1 = xf;
+	double T2 = T1*T1;
+	double T3 = T2*T1;
+	double T4 = T3*T1;
+	double T5 = T4*T1;
+	Vector4d srt;
+	srt[2] = 10*(kappaf*T2-6*thetaf*T1+12*yf)/T5;
+	srt[1] = -6*(30*yf-14*T1*thetaf-T2*kappa0+2*T2*kappaf)/T4;
+	srt[0] = 3*(20*yf-8*T1*thetaf-2*T2*kappa0+T2*kappaf)/T3;
+	srt[3] = T1;
+
 	if (srt == Vector4d::Zero())
 	{
 		result.clear();
 		return result;
 	}
+
+	// check curvature constraint
+	double x0, x1,max_kappa=0;
+	int r = gsl_poly_solve_quadratic(srt[2]*3, srt[1]*2, srt[0],&x0,&x1 );
+	switch (r)
+	{
+		case 0: break;
+		case 1: 
+			if (x0>0 && x0<srt[3])
+			{
+				for (int j = 3; j >=0; j--)
+				{
+					max_kappa *= x0;
+					max_kappa += srt[j];
+				}
+				max_kappa = fabs(max_kappa);
+			}
+			break;
+		case 2:
+			if (x0>0 && x0<srt[3])
+			{
+				for (int j = 3; j >=0; j--)
+				{
+					max_kappa *= x0;
+					max_kappa += srt[j];
+				}
+			}
+			if (x1>0 && x1<srt[3])
+			{
+				double kap=0;
+				for (int j = 3; j >=0; j--)
+				{
+					kap *= x1;
+					kap += srt[j];
+				}
+				max_kappa = max(fabs(max_kappa), fabs(kap));
+			}
+			break;
+		default: max_kappa = 10; cout<<"gsl error!"<<endl;break;
+	}
+
+	if (max_kappa>PCTrajNode::PR.kappa_max)
+	{
+		result.clear();
+		return result;
+	}
+
+	// forward and cast
 	Vector4d x(srt);
 	for (double seg = 0.0; seg < srt[3]; seg+=PR.d_nom)
 	{
 		x[3] = seg;
-		Vector4d path_seg = forward(init, x);
+		Vector4d path_seg;// = forward(init, x);
+		double seg2 = seg*seg;
+		double seg3 = seg*seg2;
+		double seg4 = seg*seg3;
+		double seg5 = seg*seg4;
+		path_seg[0] = seg;
+		path_seg[1] = kappa0*seg2/2+ srt[0]*seg3/6+srt[1]*seg4/12+srt[2]*seg5/20;
+		path_seg[2] = kappa0*seg+ srt[0]*seg2/2+srt[1]*seg3/3+srt[2]*seg4/4;
+		path_seg[3] = kappa0 + srt[0]*seg+srt[1]*seg2+srt[2]*seg3;
 		Matrix4d T_seg = Matrix4d::Identity();
 		T_seg.row(0)[0] = T_seg.row(1)[1] = cos(path_seg[2]);
 		T_seg.row(0)[1] = -sin(path_seg[2]);
 		T_seg.row(1)[0] = sin(path_seg[2]);
-		/*if (T_b.row(0)[3] < 0)
-		{
-			T_seg.row(0)[3] = -path_seg[0];
-			T_seg.row(1)[3] = -path_seg[1];
-		}
-		else
-		{*/
-			T_seg.row(0)[3] = path_seg[0];
-			T_seg.row(1)[3] = path_seg[1];
-		//}
+		T_seg.row(0)[3] = path_seg[0];
+		T_seg.row(1)[3] = path_seg[1];
+
 		PCTrajNode temp(fromNode.T*T_seg, path_seg[3]);
 		if (temp.isTraversable())
 		{
@@ -348,28 +512,74 @@ vector<PCTrajNode> PCTrajNode::SRT_Generate(const PCTrajNode& fromNode, const PC
 			result.clear();
 			return result;
 		}
-		for (double dist = 0.0; dist < pol[4]; dist += 0.01)
+		double x0, x1,max_kappa=0;
+		int r = gsl_poly_solve_quadratic(pol[3]*3, pol[2]*2,pol[1],&x0,&x1 );
+		switch (r)
 		{
-			double kap = 0;
-			for (int j = 3; j >=0; j--)
-			{
-				kap *= dist;
-				kap += pol[j];
-			}
-			if (fabs(kap) > PR.kappa_max)
-			{
-				//cout << "kappa = " << kap << " to high!" << endl;
-				kap_ok = false;
+			case 0: break;
+			case 1: 
+				if (x0>0 && x0<pol[4])
+				{
+					for (int j = 3; j >=0; j--)
+					{
+						max_kappa *= x0;
+						max_kappa += pol[j];
+					}
+					max_kappa = fabs(max_kappa);
+				}
 				break;
-			}
+			case 2:
+				if (x0>0 && x0<pol[4])
+				{
+					for (int j = 3; j >=0; j--)
+					{
+						max_kappa *= x0;
+						max_kappa += pol[j];
+					}
+				}
+				if (x1>0 && x1<pol[4])
+				{
+					double kap=0;
+					for (int j = 3; j >=0; j--)
+					{
+						kap *= x1;
+						kap += pol[j];
+					}
+					max_kappa = max(fabs(max_kappa), fabs(kap));
+				}
+				break;
+			default: max_kappa = 10; cout<<"gsl error!"<<endl;break;
 		}
-		if (!kap_ok)
+
+		if (max_kappa>PCTrajNode::PR.kappa_max)
 		{
 			result.clear();
 			return result;
 		}
+		// for (double dist = 0.0; dist < pol[4]; dist += 0.01)
+		// {
+		// 	double kap = 0;
+		// 	for (int j = 3; j >=0; j--)
+		// 	{
+		// 		kap *= dist;
+		// 		kap += pol[j];
+		// 	}
+		// 	if (fabs(kap) > PR.kappa_max)
+		// 	{
+		// 		//cout << "kappa = " << kap << " to high!" << endl;
+		// 		kap_ok = false;
+		// 		break;
+		// 	}
+		// }
+		// if (!kap_ok)
+		// {
+		// 	result.clear();
+		// 	return result;
+		// }
 	}
 
+	// cout<<"xf="<<T1<<endl;
+	// cout<<"yf="<<yf<<endl;
 	return result;
 }
 
@@ -443,30 +653,6 @@ pair<bool, double> PCTrajNode::get_rho(pcl::PointXYZI& p, pcl::PointCloud<pcl::P
 
 	return result;
 }
-
-
-// void PCTrajNode::pubProjectedPose()
-// {
-// 	geometry_msgs::PoseStamped msg;
-// 	msg.header.frame_id="/map";
-// 	msg.header.stamp=ros::Time::now();
-// 	Vector3d point=this->T.block<3,1>(0,3);
-// 	msg.pose.position.x=point(0);
-// 	msg.pose.position.y=point(1);
-// 	msg.pose.position.z=point(2);
-// 	tf::Matrix3x3 R;
-// 	for(int i=0; i<3; i++)
-// 	{
-// 		for (int j=0; j<3; j++)
-// 		{
-// 			R[i][j]=this->T(i,j);
-// 		}
-// 	}
-// 	tfScalar yaw, pitch,row;
-// 	R.getEulerYPR(yaw, pitch, row);
-// 	msg.pose.orientation=tf::createQuaternionMsgFromRollPitchYaw(row, pitch, yaw);
-// 	PCTrajNode::pubPtr->publish(msg);
-// }
 
 void pubProjectedPose(ros::Publisher *pubPtr, PCTrajNode node)
 {

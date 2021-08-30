@@ -9,6 +9,7 @@
 #include <cmath>
 #include <gsl/gsl_integration.h>
 #include <gsl/gsl_errno.h>
+#include <gsl/gsl_poly.h>
 
 using namespace std;
 using namespace Eigen;

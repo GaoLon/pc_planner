@@ -2,7 +2,7 @@
 
   <node pkg="pcl_planning" name="pcl_planner" type="pcl_planner" output="screen" >
       <param name="max_iter" type="int" value="50000"/>
-      <param name="step" type="double" value="0.6"/>
+      <param name="step" type="double" value="0.4"/>
       <param name="heuristic_straight_thresh" type="int" value="10"/>
       <!-- at least 1 -->
       <param name="tau_weight" type="int" value="5"/>

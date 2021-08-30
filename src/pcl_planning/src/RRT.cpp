@@ -155,35 +155,35 @@ void RRT::pclMapCallback(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg)
 	}
 }
 
-void RRT::setGoalCallback(const geometry_msgs::PoseStamped &goal_msg)
-{
-	if (mapReceived)
-	{
-		tf::Quaternion q;
-		tf::quaternionMsgToTF(goal_msg.pose.orientation, q);
-		tf::Matrix3x3 R(q);
+// void RRT::setGoalCallback(const geometry_msgs::PoseStamped &goal_msg)
+// {
+// 	if (mapReceived)
+// 	{
+// 		tf::Quaternion q;
+// 		tf::quaternionMsgToTF(goal_msg.pose.orientation, q);
+// 		tf::Matrix3x3 R(q);
 
-		Matrix4d goal_mat = Matrix4d::Identity();
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				goal_mat(i, j) = R[i][j];
-			}
-		}
-		goal_mat(0, 3) = goal_msg.pose.position.x;
-		goal_mat(1, 3) = goal_msg.pose.position.y;
-		goal_mat(2, 3) = goal_msg.pose.position.z;
-		//TODO
-		PCTrajNode pcn(goal_mat), pseudoOdom(Matrix4d::Identity());
-		find_path(pseudoOdom, pcn);
-		visualizeTrees();
-	}
-	else
-	{
-		ROS_INFO("No map received yet! Can't plan now.");
-	}
-}
+// 		Matrix4d goal_mat = Matrix4d::Identity();
+// 		for (int i = 0; i < 3; i++)
+// 		{
+// 			for (int j = 0; j < 3; j++)
+// 			{
+// 				goal_mat(i, j) = R[i][j];
+// 			}
+// 		}
+// 		goal_mat(0, 3) = goal_msg.pose.position.x;
+// 		goal_mat(1, 3) = goal_msg.pose.position.y;
+// 		goal_mat(2, 3) = goal_msg.pose.position.z;
+// 		//TODO
+// 		PCTrajNode pcn(goal_mat), pseudoOdom(Matrix4d::Identity());
+// 		find_path(pseudoOdom, pcn);
+// 		visualizeTrees();
+// 	}
+// 	else
+// 	{
+// 		ROS_INFO("No map received yet! Can't plan now.");
+// 	}
+// }
 
 void RRT::publishSamplePoint(Vector3d point)
 {
@@ -455,12 +455,6 @@ vector<RRT_Node> RRT::find_path(const PCTrajNode &start, const PCTrajNode &goal)
 	// 
 	goal_tree.clear();
 	RRT_Node s(start, {true, -1});
-	//Vector3d s_pos = start.get_pos();
-	//Vector2d s2g_p = goal.projection(s_pos);
-	//g2s = { 0,0, atan2(s2g_p[1], s2g_p[0]) };
-	//s2g = -g2s;
-	//Matrix4d cg = goal.Trans(g2s);
-	//PCTrajNode pcg(cg);
 	RRT_Node g(goal, {false, -1});
 	s.cost = 0;
 	g.cost = 0;
@@ -530,11 +524,6 @@ vector<RRT_Node> RRT::find_path(const PCTrajNode &start, const PCTrajNode &goal)
 	return result;
 }
 
-// vector<RRT_Node> RRT::find_path()
-// {
-// 	find_path(start, goal);
-// }
-
 // int main(int argc, char **argv)
 // {
 // 	ros::init(argc, argv, "RRT_node");
@@ -542,21 +531,3 @@ vector<RRT_Node> RRT::find_path(const PCTrajNode &start, const PCTrajNode &goal)
 // 	RRT planner;
 // 	ros::spin();
 // }
-
-//void RRT::visual_rrt(void)
-//{
-//	for (auto& p : *direct.second)
-//	{
-//		pcl::PointXYZRGB pc;
-//		pc = p.node.Chan2PC();
-//		PCTrajNode::PCMap->push_back(pc);
-//	}
-//
-//	change_direct();
-//	for (auto& p : *direct.second)
-//	{
-//		pcl::PointXYZRGB pc;
-//		pc = p.node.Chan2PC();
-//		PCTrajNode::PCMap->push_back(pc);
-//	}
-//}
