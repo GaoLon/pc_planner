@@ -155,35 +155,35 @@ void RRT::pclMapCallback(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg)
 	}
 }
 
-// void RRT::setGoalCallback(const geometry_msgs::PoseStamped &goal_msg)
-// {
-// 	if (mapReceived)
-// 	{
-// 		tf::Quaternion q;
-// 		tf::quaternionMsgToTF(goal_msg.pose.orientation, q);
-// 		tf::Matrix3x3 R(q);
+void RRT::setGoalCallback(const geometry_msgs::PoseStamped &goal_msg)
+{
+	if (mapReceived)
+	{
+		tf::Quaternion q;
+		tf::quaternionMsgToTF(goal_msg.pose.orientation, q);
+		tf::Matrix3x3 R(q);
 
-// 		Matrix4d goal_mat = Matrix4d::Identity();
-// 		for (int i = 0; i < 3; i++)
-// 		{
-// 			for (int j = 0; j < 3; j++)
-// 			{
-// 				goal_mat(i, j) = R[i][j];
-// 			}
-// 		}
-// 		goal_mat(0, 3) = goal_msg.pose.position.x;
-// 		goal_mat(1, 3) = goal_msg.pose.position.y;
-// 		goal_mat(2, 3) = goal_msg.pose.position.z;
-// 		//TODO
-// 		PCTrajNode pcn(goal_mat), pseudoOdom(Matrix4d::Identity());
-// 		find_path(pseudoOdom, pcn);
-// 		visualizeTrees();
-// 	}
-// 	else
-// 	{
-// 		ROS_INFO("No map received yet! Can't plan now.");
-// 	}
-// }
+		Matrix4d goal_mat = Matrix4d::Identity();
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				goal_mat(i, j) = R[i][j];
+			}
+		}
+		goal_mat(0, 3) = goal_msg.pose.position.x;
+		goal_mat(1, 3) = goal_msg.pose.position.y;
+		goal_mat(2, 3) = goal_msg.pose.position.z;
+		//TODO
+		PCTrajNode pcn(goal_mat), pseudoOdom(Matrix4d::Identity());
+		find_path(pseudoOdom, pcn);
+		visualizeTrees();
+	}
+	else
+	{
+		ROS_INFO("No map received yet! Can't plan now.");
+	}
+}
 
 void RRT::publishSamplePoint(Vector3d point)
 {

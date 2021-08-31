@@ -121,7 +121,7 @@ public:
 	const vector<RRT_Node> *get_goal_tree() { return &goal_tree; }
 
 	void publishSamplePoint(Vector3d point);
-	// void setGoalCallback(const geometry_msgs::PoseStamped &goal_msg);
+	void setGoalCallback(const geometry_msgs::PoseStamped &goal_msg);
 	void pclMapCallback(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg);
 	void visualizeTrees();
 	void visualizePath(vector<RRT_Node> path);

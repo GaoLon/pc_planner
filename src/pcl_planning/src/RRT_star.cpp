@@ -524,10 +524,10 @@ vector<RRT_Node> RRT_star::refined_path(const PCTrajNode& start, const PCTrajNod
 	return  path;
 }
 
-int main(int argc, char **argv)
-{
-	ros::init(argc, argv, "RRT_star_node");
-	ROS_INFO("Planner started!");
-	RRT_star planner;
-	ros::spin();
-}
+// int main(int argc, char **argv)
+// {
+// 	ros::init(argc, argv, "RRT_star_node");
+// 	ROS_INFO("Planner started!");
+// 	RRT_star planner;
+// 	ros::spin();
+// }

@@ -26,7 +26,7 @@ public:
 		rs_exp = rs_exp_k* PCTrajNode::PR.d_nom;
 		r_near = r_near_k*PCTrajNode::PR.d_nom;
 		ROS_INFO("rs_exp_k: %.2f, r_near_k: %.2f, path_r: %.2f", rs_exp_k,r_near_k,path_r);
-		goal_sub = nh.subscribe("/move_base_simple/goal", 10, &RRT_star::setGoalCallback, this);
+		// goal_sub = nh.subscribe("/move_base_simple/goal", 10, &RRT_star::setGoalCallback, this);
 	}
 	Vector3d op_sample(float d);
 	int reconstruct(Vector3d p);
