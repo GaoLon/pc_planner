@@ -91,6 +91,11 @@ vector<PCTrajNode> LocalOptimizer::optimized_path(const PCTrajNode& start, const
 	// initialization
 	vector<RRT_Node> path = refined_path(start, goal);
 	vector<PCTrajNode> p;
+	if(path.empty())
+	{
+		inProcess = false;
+		return p;
+	}
 	bool op_down = false;
 	vector<RRT_Node>::reverse_iterator riter;
 	for (riter = path.rbegin(); riter != path.rend(); riter++)
@@ -417,7 +422,11 @@ vector<int> LocalOptimizer::dijk(void)
 		ocost += get_op_cost(i, 0, 0);
 	}
 	cout << "ocost=" << ocost << endl;
-
+	if (ocost>1e7)
+	{
+		for (auto p:result)
+			p=0;
+	}
 	return result;
 }
 

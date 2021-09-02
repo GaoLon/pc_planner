@@ -70,6 +70,7 @@ public:
 		// PCTrajNode id(Matrix4d::Identity());
 		// start=id;
 		// goal=id;
+		nh.getParam("traversable_threshold", PCTrajNode::PR.traversable_threshold);
 		nh.getParam("step", step);
 		nh.getParam("max_iter", max_iter);
 		nh.getParam("heuristic_straight_thresh", heuristic_straight_thresh);

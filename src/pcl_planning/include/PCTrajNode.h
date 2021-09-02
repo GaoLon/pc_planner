@@ -38,13 +38,14 @@ struct param_restrain
 	double roll_max = M_PI_4;
 	double pitch_min = -M_PI_4;
 	double pitch_max = M_PI_4;
-	double rho_max = 0.08;
+	double rho_max =1;
 	double eta = 0.0;
 	float r_plane = 0.8;
 	float r_res = 0.5;
 	double w_rho = 1.0;
 	double w_roll = 0.0;
 	double w_pitch = 0.0;
+	double traversable_threshold=0.01;
 };
 
 class PCTrajNode
@@ -67,7 +68,8 @@ public:
 	bool fp(const Matrix4d& Tr, pcl::PointCloud<pcl::PointXYZI>::Ptr kdmap, pcl::KdTreeFLANN<pcl::PointXYZI> kd, int K=16);
 	double ft(pcl::PointCloud<pcl::PointXYZI>::Ptr kdmap, pcl::KdTreeFLANN<pcl::PointXYZI> kd);
 	void ter_assess(void);
-	bool isTraversable(void) { return tau > 0.5; }
+	bool isTraversable(void) { return tau > PR.traversable_threshold; }
+	// bool isTraversable(void) { return true; }
 	VectorXd connect(const PCTrajNode& toNode);
 	double get_dist(Vector3d p){ return (p - T.topRightCorner(3, 1)).norm(); }
 	double get_dist(const PCTrajNode& p) const { return (p.T.topRightCorner(3, 1) - T.topRightCorner(3, 1)).norm(); }
