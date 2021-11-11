@@ -1,1 +1,4 @@
 driving on points cloud based on rrt
+NOTE:
+you need GSL, can get it from https://www.gnu.org/software/gsl/
+building GSL from source files is my suggestion
