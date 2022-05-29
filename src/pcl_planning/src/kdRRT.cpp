@@ -6,7 +6,7 @@ extern pcl::KdTreeFLANN<pcl::PointXYZI> kdtree;
 void kdRRT::visualizePath(vector<kdRRT_Node> path)
 {
 	geometry_msgs::PoseArray msg;
-	msg.header.frame_id = "/map";
+	msg.header.frame_id = "map";
 	msg.header.stamp = ros::Time::now();
 
 	geometry_msgs::Pose pose;
@@ -42,12 +42,12 @@ void kdRRT::visualizeTrees()
 
 	// visualize tree nodes
 	geometry_msgs::PoseArray msg;
-	msg.header.frame_id = "/map";
+	msg.header.frame_id = "map";
 	msg.header.stamp = ros::Time::now();
 
 	//visualize tree edges
 	visualization_msgs::Marker edges;
-	edges.header.frame_id = "/map";
+	edges.header.frame_id = "map";
 	edges.header.stamp = ros::Time::now();
 	edges.ns = "RRT";
 	edges.id = 0;

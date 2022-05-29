@@ -137,7 +137,7 @@ void odometryHandler(const nav_msgs::Odometry::ConstPtr& odom)
   sensor_msgs::PointCloud2 trajectory2;
   pcl::toROSMsg(*trajectory, trajectory2);
   trajectory2.header.stamp = odom->header.stamp;
-  trajectory2.header.frame_id = "/map";
+  trajectory2.header.frame_id = "map";
   pubTrajectoryPtr->publish(trajectory2);
 }
 
@@ -185,7 +185,7 @@ void laserCloudHandler(const sensor_msgs::PointCloud2ConstPtr& laserCloudIn)
     sensor_msgs::PointCloud2 exploredArea2;
     pcl::toROSMsg(*exploredAreaCloud, exploredArea2);
     exploredArea2.header.stamp = laserCloudIn->header.stamp;
-    exploredArea2.header.frame_id = "/map";
+    exploredArea2.header.frame_id = "map";
     pubExploredAreaPtr->publish(exploredArea2);
 
     exploredAreaDisplayCount = 0;
@@ -284,7 +284,7 @@ int main(int argc, char** argv)
     overallMapDisplayCount++;
     if (overallMapDisplayCount >= 100 * overallMapDisplayInterval) {
       overallMap2.header.stamp = ros::Time().fromSec(systemTime);
-      overallMap2.header.frame_id = "/map";
+      overallMap2.header.frame_id = "map";
       pubOverallMap.publish(overallMap2);
 
       overallMapDisplayCount = 0;

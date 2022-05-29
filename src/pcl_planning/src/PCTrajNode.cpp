@@ -657,7 +657,7 @@ pair<bool, double> PCTrajNode::get_rho(pcl::PointXYZI& p, pcl::PointCloud<pcl::P
 void pubProjectedPose(ros::Publisher *pubPtr, PCTrajNode node)
 {
 	geometry_msgs::PoseStamped msg;
-	msg.header.frame_id="/map";
+	msg.header.frame_id="map";
 	msg.header.stamp=ros::Time::now();
 	Vector3d point=node.T.block<3,1>(0,3);
 	msg.pose.position.x=point(0);

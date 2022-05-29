@@ -5,7 +5,7 @@
   <node pkg="visualization_tools" type="visualizationTools" name="visualizationTools" output="screen">
     <param name="metricFile" type="string" value="log/metrics" />
     <param name="trajFile" type="string" value="log/trajectory" />
-    <param name="mapFile" type="string" value="/home/xulong/pcplan/src/visualization_tools/src/map.ply" />
+    <param name="mapFile" type="string" value="/home/xulong/pc_planner/src/visualization_tools/src/pointcloud.ply" />
     <param name="overallMapVoxelSize" type="double" value="0.5" />
     <param name="exploredAreaVoxelSize" type="double" value="0.3" />
     <param name="exploredVolumeVoxelSize" type="double" value="0.5" />

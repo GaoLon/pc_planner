@@ -24,7 +24,7 @@ RRT* planner;
 void visualizeTreeNode(const vector<RRT_Node> *vec_ptr, ros::Publisher *pub_ptr)
 {
 	geometry_msgs::PoseArray msg;
-	msg.header.frame_id = "/map";
+	msg.header.frame_id = "map";
 	msg.header.stamp = ros::Time::now();
 
 	geometry_msgs::Pose pose;

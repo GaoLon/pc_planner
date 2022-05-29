@@ -5,7 +5,7 @@ extern bool mapReceived;
 void LocalOptimizer::visualizePath(vector<PCTrajNode> path)
 {
 	geometry_msgs::PoseArray msg;
-	msg.header.frame_id = "/map";
+	msg.header.frame_id = "map";
 	msg.header.stamp = ros::Time::now();
 
 	geometry_msgs::Pose pose;

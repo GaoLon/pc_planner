@@ -7,7 +7,7 @@ bool mapReceived = false;
 void RRT::visualizePath(vector<RRT_Node> path)
 {
 	geometry_msgs::PoseArray msg;
-	msg.header.frame_id = "/map";
+	msg.header.frame_id = "map";
 	msg.header.stamp = ros::Time::now();
 
 	geometry_msgs::Pose pose;
@@ -43,12 +43,12 @@ void RRT::visualizeTrees()
 
 	// visualize tree nodes
 	geometry_msgs::PoseArray msg;
-	msg.header.frame_id = "/map";
+	msg.header.frame_id = "map";
 	msg.header.stamp = ros::Time::now();
 
 	//visualize tree edges
 	visualization_msgs::Marker edges;
-	edges.header.frame_id = "/map";
+	edges.header.frame_id = "map";
 	edges.header.stamp = ros::Time::now();
 	edges.ns = "RRT";
 	edges.id = 0;
@@ -188,7 +188,7 @@ void RRT::setGoalCallback(const geometry_msgs::PoseStamped &goal_msg)
 void RRT::publishSamplePoint(Vector3d point)
 {
 	geometry_msgs::PointStamped msg;
-	msg.header.frame_id = "/map";
+	msg.header.frame_id = "map";
 	msg.header.stamp = ros::Time::now();
 	msg.point.x = point(0);
 	msg.point.y = point(1);
