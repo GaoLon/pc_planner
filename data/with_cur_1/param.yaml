@@ -1,0 +1,54 @@
+use_planner: 0
+
+pc_node_Param_d_nom: 2 #
+pc_node_Param_d_rob: [1.4,1.4,1.4,1.4]  #[1.4,1.4,1.4,1.4]  #robot box
+pc_node_Param_eta: 0.0  #离群用的
+pc_node_Param_kappa_max: 1000 #0.8
+pc_node_Param_pitch_max:  0.7853981 #M_PI_4
+pc_node_Param_pitch_min: -0.7853981 #-M_PI_4
+pc_node_Param_normal_max: 1 #rad  57度 
+pc_node_Param_r_plane: 5  #拟合平面用的半径   5
+pc_node_Param_r_res: 3.5   #计算粗糙度用的半径   3.5
+pc_node_Param_rho_max: 5  
+pc_node_Param_roll_max: 0.7853981 #M_PI_4 
+pc_node_Param_traversable_threshold: 0.01
+pc_node_Param_w_pitch: 0.0
+pc_node_Param_w_rho: 1.0
+pc_node_Param_w_normal: 0 
+pc_node_Param_w_roll: 0.0
+
+rrt_param_heuristic_straight_thresh: 10
+rrt_param_max_iter: 50000
+rrt_param_step: 2  #trajlib长度
+rrt_param_tau_weight: 5
+rrt_param_trees_merge_thresh: 6 #pc_node_Param_d_nom*3
+
+
+#1500 60 是测100条2s8  88    max_refine_num最大1500  near_rrt_star: 30  path_r: 0.1
+#1500 60 是测500条3s1  90    max_refine_num最大1500  near_rrt_star: 30  path_r: 0.1
+#1000 100 是测500条2s  89    max_refine_num最大1000  near_rrt_star: 30  path_r: 0.1
+#1100 100 是测500条2s5  89    max_refine_num最大1100 near_rrt_star: 30  path_r: 0.1
+#1200 120 是测500条2s8  89    max_refine_num最大1200 near_rrt_star: 30  path_r: 0.1
+#1000 100 是测500条2s   89    max_refine_num最大1000 near_rrt_star: 50   path_r: 0.1
+#1000 100 是测500条2s   89    max_refine_num最大1000 near_rrt_star: 50   path_r: 0.1 过半0.05
+#1300 100 是测500条3s   89(较小的89.1 上面的很多都89.8)    max_refine_num最大1300 near_rrt_star: 50   path_r: 0.2->0.1->0.05
+#1000 100 是测500条           max_refine_num最大应变 near_rrt_star: 50   path_r: 0.2->0.1->0.05
+rrt_star_param_alpha: 0.1
+rrt_star_param_max_refine_num: 1000
+rrt_star_param_N_a: 0
+rrt_star_param_N_max_avg: 100 #25     
+rrt_star_param_N_rewire: 0
+rrt_star_param_path_r: 0.075 # 0.1
+rrt_star_param_rs_exp_k: 2
+rrt_star_param_r_exp_rrtstar: 2   #pc_node_Param_d_nom*rs_exp_k
+rrt_star_param_r_near_k: 2.5
+rrt_star_param_r_near_rrt_star: 30 # 30  #pc_node_Param_d_nom*r_near_k
+#r_near_rrt_star  要大于r_exp_rrtstar
+
+local_param_delta_max: 0.06
+local_param_delta_min: 0.01
+local_param_din_max: 3 #pc_node_Param_d_nom*1.5
+local_param_din_min: 1 #pc_node_Param_d_nom*0.5
+local_param_w_curv: 0 #
+local_param_w_len: 1 #
+local_param_w_trav: 0 #

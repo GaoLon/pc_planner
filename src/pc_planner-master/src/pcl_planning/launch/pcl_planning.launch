@@ -1,0 +1,9 @@
+<launch>
+
+  <node pkg="pcl_planning" name="pcl_planner" type="pcl_planner" output="screen" >
+  <rosparam file="$(find pcl_planning)/config/params.yaml" command="load" />
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find pcl_planning)/config/pcl_plan.rviz" required="true"  />  
+
+</launch>
