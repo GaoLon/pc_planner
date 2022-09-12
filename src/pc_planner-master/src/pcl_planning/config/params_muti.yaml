@@ -1,0 +1,106 @@
+mapBound: [-70,30,-70,30,-10,20]
+resolution: 0.2
+esdf_vis_slice_height_: 30
+
+use_planner: 0
+
+pc_node_Param_d_nom: 1 #
+pc_node_Param_d_rob: [0.6,0.6,0.6,0.6]  #[1.4,1.4,1.4,1.4]  #robot box
+pc_node_Param_eta: 0.2  #离群用的
+pc_node_Param_kappa_max: 1000 #0.8
+pc_node_Param_pitch_max:  0.7853981 #M_PI_4
+pc_node_Param_pitch_min: -0.7853981 #-M_PI_4
+pc_node_Param_normal_max: 0.707 #  45度 
+pc_node_Param_r_plane: 0.8  #拟合平面用的半径   5
+pc_node_Param_r_res: 0.6   #计算粗糙度用的半径   3.5
+pc_node_Param_rho_max: 5  
+pc_node_Param_roll_max: 0.7853981 #M_PI_4 
+pc_node_Param_traversable_threshold: 0.01
+pc_node_Param_w_pitch: 0.0
+pc_node_Param_w_rho: 1.0
+pc_node_Param_w_normal: 0 
+pc_node_Param_w_roll: 0.0
+
+rrt_param_heuristic_straight_thresh: 10
+rrt_param_max_iter: 50000
+rrt_param_step: 0.6  #trajlib长度
+rrt_param_tau_weight: 5
+rrt_param_trees_merge_thresh: 1.5 #pc_node_Param_d_nom*3
+
+rrt_star_param_alpha: 0.1
+rrt_star_param_max_refine_num: 500
+rrt_star_param_N_a: 0
+rrt_star_param_N_max_avg: 100
+rrt_star_param_N_rewire: 0
+rrt_star_param_path_r: 0.1
+rrt_star_param_rs_exp_k: 2
+rrt_star_param_r_exp_rrtstar: 1   #0.4 #pc_node_Param_d_nom*rs_exp_k    //exp_rrtstar 和d_nom 对SRT rewire影响巨大 因为每次rewire出一个新的点和其他near连靠的都是d_norm的间隔
+rrt_star_param_r_near_k: 2.5
+rrt_star_param_r_near_rrt_star: 10  #找Vnear的范围
+#r_near_rrt_star  要大于r_exp_rrtstar
+
+local_param_delta_max: 0.06
+local_param_delta_min: 0.01
+local_param_din_max: 0.9 #pc_node_Param_d_nom*1.5
+local_param_din_min: 0 #pc_node_Param_d_nom*0.5
+local_param_w_curv: 0 #
+local_param_w_len: 1 #
+local_param_w_trav: 0 #
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
